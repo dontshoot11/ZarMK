@@ -1,4 +1,5 @@
 const player1 = {
+    player: 1,
     name: "Sub-Zero",
     hp: 100,
     img: "http://reactmarathon-api.herokuapp.com/assets/scorpion.gif",
@@ -9,6 +10,7 @@ const player1 = {
 };
 
 const player2 = {
+    player: 2,
     name: "Scorpion",
     hp: 100,
     img: "http://reactmarathon-api.herokuapp.com/assets/subzero.gif",
