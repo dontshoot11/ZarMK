@@ -88,6 +88,5 @@ $arena.appendChild(createPlayer(player2));
 
 $randomButton.addEventListener("click", () => {
     const playerNumber = getRandomNumber(1, 3);
-    console.log(playerNumber);
     playerNumber === 1 ? changeHP(player1) : changeHP(player2);
 });
