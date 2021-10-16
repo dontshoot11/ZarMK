@@ -70,7 +70,7 @@ const checkPlayers = function() {
         $arena.appendChild(playerWin(`${player2.name}`));
         $randomButton.disabled = true;
         return;
-    } else if (player2 < 0 && player1.hp > 0) {
+    } else if (player2.hp < 0 && player1.hp > 0) {
         $arena.appendChild(playerWin(`${player1.name}`));
         $randomButton.disabled = true;
         return;
@@ -87,5 +87,7 @@ $arena.appendChild(createPlayer(player1));
 $arena.appendChild(createPlayer(player2));
 
 $randomButton.addEventListener("click", () => {
-    changeHP(player1);
+    const playerNumber = getRandomNumber(1, 3);
+    console.log(playerNumber);
+    playerNumber === 1 ? changeHP(player1) : changeHP(player2);
 });
