@@ -1,3 +1,6 @@
+const $arena = document.querySelector(".arenas");
+const $randomButton = document.querySelector(".button");
+
 const player1 = {
     player: 1,
     name: "Sub-Zero",
@@ -20,21 +23,21 @@ const player2 = {
     },
 };
 
-const createPlayer = function(className, player) {
-    const $arena = document.querySelector(".arenas");
-    const $fighter = document.createElement("div");
-    $fighter.classList.add(`${className}`);
-    const $progressBar = document.createElement("div");
-    $progressBar.classList.add("progressbar");
-    const $life = document.createElement("div");
-    $life.classList.add("life");
-    $life.style.width = `${player.life}`;
-    const $name = document.createElement("div");
-    $name.classList.add("name");
+const createElement = function(tag, className) {
+    const $tag = document.createElement(tag);
+    className ? $tag.classList.add(className) : null;
+    return $tag;
+};
+
+const createPlayer = function(player) {
+    const $fighter = createElement("div", `player${player.player}`);
+    const $progressBar = createElement("div", "progressbar");
+    const $life = createElement("div", "life");
+    $life.style.width = `${player.hp}%`;
+    const $name = createElement("div", "name");
     $name.innerText = `${player.name}`;
-    const $character = document.createElement("div");
-    $character.classList.add("character");
-    const $img = document.createElement("img");
+    const $character = createElement("div", "character");
+    const $img = createElement("img");
     $img.src = `${player.img}`;
 
     $character.appendChild($img);
@@ -42,8 +45,47 @@ const createPlayer = function(className, player) {
     $progressBar.appendChild($name);
     $fighter.appendChild($progressBar);
     $fighter.appendChild($character);
-    $arena.appendChild($fighter);
+
+    return $fighter;
 };
 
-createPlayer("player1", player1);
-createPlayer("player2", player2);
+const changeHP = function(player) {
+    const damage = getRandomNumber(1, 21);
+    const $playerLife = document.querySelector(`.player${player.player} .life`);
+    player.hp -= damage;
+    player.hp > 0 ?
+        ($playerLife.style.width = `${player.hp}%`) :
+        ($playerLife.style.width = `0%`);
+    checkPlayers();
+};
+
+const playerWin = function(name) {
+    const $winTitle = createElement("div", "winTitle");
+    $winTitle.innerText = `${name} win`;
+    return $winTitle;
+};
+
+const checkPlayers = function() {
+    if (player1.hp < 0 && player2.hp > 0) {
+        $arena.appendChild(playerWin(`${player2.name}`));
+        $randomButton.disabled = true;
+        return;
+    } else if (player2 < 0 && player1.hp > 0) {
+        $arena.appendChild(playerWin(`${player1.name}`));
+        $randomButton.disabled = true;
+        return;
+    }
+};
+
+const getRandomNumber = function(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+};
+
+$arena.appendChild(createPlayer(player1));
+$arena.appendChild(createPlayer(player2));
+
+$randomButton.addEventListener("click", () => {
+    changeHP(player1);
+});
